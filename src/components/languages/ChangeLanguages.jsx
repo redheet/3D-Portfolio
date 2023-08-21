@@ -4,6 +4,7 @@ import { JP } from "country-flag-icons/react/3x2";
 import { ID } from "country-flag-icons/react/3x2";
 import { US } from "country-flag-icons/react/3x2";
 import { useTranslation } from "react-i18next";
+import { langChange } from "../../constants";
 
 function ChangeLanguages() {
   const { i18n } = useTranslation();
@@ -14,6 +15,8 @@ function ChangeLanguages() {
   const handleClick = (event) => {
     setActive(event.target.id);
   };
+
+  const [active, setActive] = useState("");
 
   return (
     <div className="dropdown dropdown-bottom dropdown-end">
@@ -34,16 +37,29 @@ function ChangeLanguages() {
                 </svg> */}
       </div>
       <ul
+        onClick={() => {
+          setActive("");
+        }}
         tabIndex={0}
         className="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-52"
       >
-        <li>
-          <button onClick={() => handleChangeLng("en")}>
-            <US title="English" className="w-5 h-5" />
-            English
-          </button>
-        </li>
-        <li>
+        {langChange.map((lang) => (
+          <li
+            key={lang.id}
+            className={`${
+              active === lang.title ? "text-black" : "text-slate-500"
+            } hover:text-slate-500 text-[18px] font-medium cursor-pointer `}
+            onClick={() => setActive(lang.title)}
+          >
+            <a onClick={() => handleChangeLng(lang.id)}>
+              <img src={lang.icon} className="w-5 h-5" />
+              {lang.title}
+            </a>
+          </li>
+        ))}
+
+        {/* <li>
+        <US title="English" className="w-5 h-5" />
           <button onClick={() => handleChangeLng("id")}>
             <ID title="Indonesia" className="w-5 h-5" />
             Indonesia
@@ -54,7 +70,7 @@ function ChangeLanguages() {
             <JP title="日本語" className="w-5 h-5" />
             日本語
           </button>
-        </li>
+        </li> */}
       </ul>
     </div>
   );
